@@ -10,6 +10,7 @@ import androidx.core.view.isEmpty
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kr.co.lion.android01.ex10_message.databinding.ActivitySecondBinding
+import java.lang.NumberFormatException
 
 class SecondActivity : AppCompatActivity() {
 
@@ -49,21 +50,48 @@ class SecondActivity : AppCompatActivity() {
                     when (it.itemId) {
                         R.id.inputstudentmenu -> {
 
-                            var name = nameTextField.text.toString()
-                            var grade = gradeTextField.text.toString().toInt()
-                            var kor = korTextField.text.toString().toInt()
-                            var eng = engTextField.text.toString().toInt()
-                            var math = mathTextField.text.toString().toInt()
+                            var name = nameTextField.text.toString().trim()
+                            var gradetext = gradeTextField.text.toString().trim()
+                            var kortext = korTextField.text.toString().trim()
+                            var engtext = engTextField.text.toString().trim()
+                            var mathtext = mathTextField.text.toString().trim()
 
-                            var info1 = InfoClass(name, grade, kor, eng, math)
+                            if (name.isEmpty() || gradetext.isEmpty() || kortext.isEmpty() || engtext.isEmpty() || mathtext.isEmpty()) {
+                                var builder =
+                                    MaterialAlertDialogBuilder(this@SecondActivity).apply {
+                                        //타이틀
+                                        setTitle("입력 오류")
+                                        //메시지
+                                        setMessage("정보를 알맞게 입력하시오")
+                                        //긍정 버튼
+                                        setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
+
+                                        }
+                                        //부정 버튼
+                                        setNegativeButton("취소") { dialogInterface: DialogInterface, i: Int ->
+
+                                        }
+                                    }
+                                builder.show()
+                            } else {
+                                try {
 
 
-                            var newIntentt = Intent()
-                            newIntentt.putExtra("info1", info1)
+                                    var grade = gradetext.toInt()
+                                    var kor = kortext.toInt()
+                                    var eng = engtext.toInt()
+                                    var math = mathtext.toInt()
 
-                            setResult(RESULT_OK, newIntentt)
-                            finish()
+                                    var info1 = InfoClass(name, grade, kor, eng, math)
+                                    var newIntentt = Intent()
+                                    newIntentt.putExtra("info1", info1)
 
+                                    setResult(RESULT_OK, newIntentt)
+                                    finish()
+                                }catch (e: Exception){
+
+                                }
+                            }
 
                         }
 
@@ -78,25 +106,7 @@ class SecondActivity : AppCompatActivity() {
 
     }
     fun initView() {
-        activitySecondBinding.apply {
-            var builder = MaterialAlertDialogBuilder(this@SecondActivity).apply {
-                //타이틀
-                setTitle("입력 오류")
-                //메시지
-                setMessage("정보를 알맞게 입력하시오")
-                //긍정 버튼
-                setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
 
-                }
-                //부정 버튼
-                setNegativeButton("취소") { dialogInterface: DialogInterface, i: Int ->
-
-                }
-            }
-            builder.show()
-
-
-        }
     }
     fun setState(){
 
